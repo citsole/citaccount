@@ -1,0 +1,45 @@
+﻿@page "/branch"
+
+@using citaccount.Service
+@using citaccount.Data
+@using MatBlazor
+
+@inject SettingService settingService
+@inject IToastService toastService
+
+@if (bra == null)
+{
+    <p><em>ກຳລັງໂຫຼດຂໍ້ມູນ...</em></p>
+}
+else
+{
+    <a class="btn btn-primary btn-sm" href="/createbranch">ເພີ່ມໃໝ່</a>
+    <MatTable Items="@bra" PageSize="10" LoadInitialData="true" Striped="true" FilterByColumnName="Name" DebounceMilliseconds="150" class="mat-elevation-z5">
+        <MatTableHeader>
+            <th>ລດ</th>
+            <th>ລະຫັດ</th>
+            <th>ຊື່ສາຂາ</th>
+            <th>ທີ່ຕ້ັງ</th>
+            <th>Actions</th>
+        </MatTableHeader>
+        <MatTableRow>
+            <td></td>
+            <td>@context.Code</td>
+            <td width="30%">@context.Name</td>
+            <td width="30%">@context.Address</td>
+            <td>
+                <a type="button" class="btn btn-primary btn-sm" href="editbranch/@context.Id">ແກ້ໄຂ</a>
+                <a type="button" class="btn btn-danger btn-sm" href="deletebranch/@context.Id">ລຶບຂໍ້ມູນ</a>
+            </td>
+        </MatTableRow>
+    </MatTable>
+}
+
+@code {
+    List<TblBranch> bra;
+    protected override void OnInitialized()
+    {
+        bra = settingService.ShowAllBranch();
+        //toastService.ShowSuccess($"ໂຫຼດຂໍ້ມູນສຳເລັດ! ປະກອບມີ {gracc.Count()} ກູ່ມບັນຊີ.", "ກູ່ມບັນຊີ");
+    }
+}

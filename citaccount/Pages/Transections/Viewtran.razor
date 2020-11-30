@@ -1,0 +1,119 @@
+﻿@page "/viewtran/{currentID}"
+
+@using citaccount.Data
+@using citaccount.Service
+
+@inject TransectionService tranService
+@inject SettingService settingService
+@inject IToastService toastService
+@inject NavigationManager nav
+
+<h3>ການເຄື່ອນໄຫວບັນຊີປະຈຳ</h3>
+
+<EditForm Model="tran" OnValidSubmit="Approved">
+
+    <FluentValidationValidator />
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="Code">ລົງວັນທີ, ເດືອນ, ປີ:</label>
+                <input type="date" class="form-control" @bind="@tran.CreateDate" placeholder="ວັນທີ">
+                <ValidationMessage For="@(() => tran.CreateDate)" />
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="Code">ເລກທີອ້າງອີງ:</label>
+                <input type="text" class="form-control" @bind="@tran.TranNo" placeholder="ເລກທີ" autofocus>
+                <ValidationMessage For="@(() => tran.TranNo)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col">
+            <label for="Code">ບັນຊີໜີ້:</label>
+            <input type="text" list="textDebitsearch" class="form-control" @bind="tran.AccDebit" />
+            <ValidationMessage For="@(() => tran.AccDebit)" />
+            <datalist id="textDebitsearch">
+                @foreach (var a in acc)
+                {
+                    <option value="@a.AccNo"></option>
+                }
+            </datalist>
+        </div>
+        <div class="col">
+            <label for="Code">ບັນຊີມີ:</label>
+            <input type="text" list="textCrebitsearch" class="form-control" @bind="tran.AccCredit" />
+            <ValidationMessage For="@(() => tran.AccCredit)" />
+            <datalist id="textCrebitsearch">
+                @foreach (var a in acc)
+                {
+                    <option value="@a.AccNo"></option>
+                }
+            </datalist>
+        </div>
+        <div class="col">
+            <label for="Code">ຈຳນວນເງິນ:</label>
+            <OceanNumericInput FormatString="N" NumberOfDecimalPlaces="2" @bind-Value="@tran.Amount" placeholder="ຈຳນວນເງິນ" Class="form-control"></OceanNumericInput>
+            <ValidationMessage For="@(() => tran.Amount)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Name">ເນື້ອໃນການເຄື່ອນໄຫວ:</label>
+        <input type="text" class="form-control" @bind="tran.Des" placeholder="ເນື້ອໃນການເຄື່ອນໄຫວ">
+        <ValidationMessage For="@(() => tran.Des)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">ອານຸມັດ</button>
+    <button type="button" class="btn btn-danger" @onclick="@Rejected">ຍົກເລີກ</button>
+    <button type="button" class="btn btn-warning" @onclick="@goBack">ກັບຄືນ</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string currentId { get; set; }
+
+    TblTransection tran = new TblTransection();
+    List<TblAcc> acc;
+
+    protected override void OnInitialized()
+    {
+        tran.TranNo = DateTime.Now.ToString("yyMMddHHmmss");
+        tran.CreateDate = DateTime.Now;
+
+        acc = settingService.ShowAllAcc();
+        tran = tranService.GetTranById(Convert.ToInt32(currentId));
+    }
+
+    protected void Approved()
+    {
+        tran.StatusId = 2; //2 ແມ່ນສະຖານະ ອານຸມັດ ແລ້ວ
+        tran.UserId = 1;
+        tran.CurrencyId = 1;
+        tran.BranchId = 1;
+        tran.UserApproveId = 1;
+
+        tranService.UpdateTran(tran);
+        nav.NavigateTo("transection");
+        toastService.ShowSuccess($"ທ່ານໄດ້ອານຸມັດ ທຸລະກຳເລກທີ {tran.TranNo} - {tran.Des} ສຳເລັດ!", "ການເຄື່ອນໄຫວ");
+    }
+    protected void Rejected()
+    {
+        tran.StatusId = 3; //3 ແມ່ນສະຖານະ ຍົກເລີກ
+        tran.UserId = 1;
+        tran.CurrencyId = 1;
+        tran.BranchId = 1;
+        tran.UserApproveId = 1;
+
+        tranService.UpdateTran(tran);
+        nav.NavigateTo("transection");
+        toastService.ShowError($"ທ່ານໄດ້ຍົກເລີກ ທຸລະກຳເລກທີ {tran.TranNo} - {tran.Des} ສຳເລັດ!", "ການເຄື່ອນໄຫວ");
+    }
+
+    void goBack()
+    {
+        nav.NavigateTo("transection");
+    }
+}

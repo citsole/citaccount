@@ -1,0 +1,48 @@
+﻿@page "/createbranch"
+
+@using citaccount.Data
+@using citaccount.Service
+
+@inject SettingService settingService
+@inject IToastService toastService
+@inject NavigationManager nav
+
+<h3>ເພີ່ມໃໝ່</h3>
+<EditForm Model="@bra">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="Code">ລະຫັດ:</label>
+        <input type="text" class="form-control" @bind="@bra.Code" placeholder="ເລກບັນຊີ">
+        <ValidationMessage For="@(() => bra.Code)" />
+    </div>
+    <div class="form-group">
+        <label for="Name">ຊື່ສາຂາ:</label>
+        <input type="text" class="form-control" @bind="bra.Name" placeholder="ຊື່ສາຂາ">
+        <ValidationMessage For="@(() => bra.Name)" />
+    </div>
+    <div class="form-group">
+        <label for="Name">ທີ່ຕ້ັງ:</label>
+        <input type="text" class="form-control" @bind="bra.Address" placeholder="ທີ່ຕ້ັງ">
+        <ValidationMessage For="@(() => bra.Address)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" @onclick="@AddBranch">ບັນທຶກ</button>
+    <button type="button" class="btn btn-warning" @onclick="@goBack">ກັບຄືນ</button>
+
+</EditForm>
+
+@code {
+    TblBranch bra = new TblBranch();
+
+    protected void AddBranch()
+    {
+        settingService.CreateBranch(bra);
+        nav.NavigateTo("branch");
+        toastService.ShowSuccess($"ທ່ານເພີ່ມຂໍ້ມູນ {bra.Name} ສຳເລັດ!", "ສາຂາ");
+    }
+    void goBack()
+    {
+        nav.NavigateTo("branch");
+    }
+}

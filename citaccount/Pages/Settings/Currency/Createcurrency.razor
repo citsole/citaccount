@@ -1,0 +1,43 @@
+﻿@page "/createcurrency"
+
+@using citaccount.Data
+@using citaccount.Service
+
+@inject SettingService settingService
+@inject IToastService toastService
+@inject NavigationManager nav
+
+<h3>ເພີ່ມໃໝ່</h3>
+<EditForm Model="@cur">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="Code">ສັນຍາລັກ:</label>
+        <input type="text" class="form-control" @bind="@cur.Symboll" placeholder="ສັນຍາລັກ">
+        <ValidationMessage For="@(() => cur.Symboll)" />
+    </div>
+    <div class="form-group">
+        <label for="Name">ຊື່ສັນຍາລັກ:</label>
+        <input type="text" class="form-control" @bind="cur.Name" placeholder="ຊື່ສັນຍາລັກ">
+        <ValidationMessage For="@(() => cur.Name)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" @onclick="@AddBranch">ບັນທຶກ</button>
+    <button type="button" class="btn btn-warning" @onclick="@goBack">ກັບຄືນ</button>
+
+</EditForm>
+
+@code {
+    TblCurrency cur = new TblCurrency();
+
+    protected void AddBranch()
+    {
+        settingService.CreateCurrency(cur);
+        nav.NavigateTo("currency");
+        toastService.ShowSuccess($"ທ່ານເພີ່ມຂໍ້ມູນ {cur.Name} ສຳເລັດ!", "ສະກຸນເງິນ");
+    }
+    void goBack()
+    {
+        nav.NavigateTo("currency");
+    }
+}

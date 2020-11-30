@@ -1,0 +1,49 @@
+﻿@page "/createaccount"
+
+@using citaccount.Data
+@using citaccount.Service
+
+@inject SettingService settingService
+@inject IToastService toastService
+@inject NavigationManager nav
+
+<h3>ເພີ່ມໃໝ່</h3>
+<EditForm Model="@acc" OnValidSubmit="AddGroupAcc">
+    <FluentValidationValidator/>
+
+    <div class="form-group">
+        <label for="Code">ເລກບັນຊີ:</label>
+        <input type="text" class="form-control" @bind="@acc.AccNo" placeholder="ເລກບັນຊີ">
+        <ValidationMessage For="@(() => acc.AccNo)" />
+    </div>
+    <div class="form-group">
+        <label for="Name">ຊື່ບັນຊີ:</label>
+        <input type="text" class="form-control" @bind="acc.Name" placeholder="ຊື່ບັນຊີ">
+        <ValidationMessage For="@(() => acc.Name)" />
+    </div>
+    <div class="form-group">
+        <label for="Name">ລົງໜີ້:</label>
+        <input type="checkbox" @bind="@acc.BalDebit">
+        <label for="Name">ລົງມີ:</label>
+        <input type="checkbox" @bind="@acc.BalCredit">
+    </div>
+
+    <button type="submit" class="btn btn-primary">ບັນທຶກ</button>
+    <button type="button" class="btn btn-warning" @onclick="@goBack">ກັບຄືນ</button>
+
+</EditForm>
+
+@code {
+    TblAcc acc = new TblAcc();
+
+    protected void AddGroupAcc()
+    {
+        settingService.CreateAcc(acc);
+        nav.NavigateTo("account");
+        toastService.ShowSuccess($"ທ່ານເພີ່ມຂໍ້ມູນ {acc.Name} ສຳເລັດ!", "ກູ່ມບັນຊີ");
+    }
+    void goBack()
+    {
+        nav.NavigateTo("account");
+    }
+}

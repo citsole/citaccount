@@ -1,0 +1,52 @@
+﻿@page "/editbranch/{currentId}"
+
+@using citaccount.Service
+@using citaccount.Data
+
+@inject SettingService settingService
+@inject IToastService toastService
+@inject NavigationManager nav
+
+<h3>ແກ້ໄຂ</h3>
+
+<EditForm Model="@bra">
+    <div class="form-group">
+        <label for="Code">ລະຫັດ:</label>
+        <input type="text" class="form-control" @bind="@bra.Code" placeholder="ລະຫັດ">
+    </div>
+    <div class="form-group">
+        <label for="Name">ຊື່ສາຂາ:</label>
+        <input type="text" class="form-control" @bind="bra.Name" placeholder="ຊື່ສາຂາ">
+    </div>
+    <div class="form-group">
+        <label for="Name">ທີ່ຕ້ັງ:</label>
+        <input type="text" class="form-control" @bind="bra.Address" placeholder="ທີ່ຕ້ັງ">
+    </div>
+
+    <button type="submit" class="btn btn-primary" @onclick="@UpdateBranch">ບັນທຶກ</button>
+    <button type="button" class="btn btn-warning" @onclick="@goBack">ກັບຄືນ</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public string currentId { get; set; }
+
+    TblBranch bra = new TblBranch();
+
+    protected override void OnInitialized()
+    {
+        bra = settingService.GetBranchById(Convert.ToInt32(currentId));
+    }
+
+    protected void UpdateBranch()
+    {
+        settingService.UpdateBranch(bra);
+        nav.NavigateTo("branch");
+        toastService.ShowSuccess($"ທ່ານແກ້ໄຂຂໍ້ມູນ {bra.Name} ສຳເລັດ!", "ບັນຊີ");
+    }
+    void goBack()
+    {
+        nav.NavigateTo("branch");
+    }
+}

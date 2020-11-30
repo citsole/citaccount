@@ -1,0 +1,65 @@
+﻿@page "/createdistrict"
+
+@using citaccount.Data
+@using citaccount.Service
+
+@inject SettingService settingService
+@inject IToastService toastService
+@inject NavigationManager nav
+
+<h3>ເພີ່ມໃໝ່</h3>
+<EditForm Model="@dis" OnValidSubmit="@AddDistrict">
+    <FluentValidationValidator />
+    <div class="form-group">
+        <label for="Name">ຊື່ເມືອງ:</label>
+        <InputText id="Name" class="form-control" @bind-Value="dis.Name" placeholder="ຊື່ເມືອງ"></InputText>
+        <ValidationMessage For="@(() => dis.Name)" />
+    </div>
+    <div class="form-group">
+        <label for="Name">ຂໍ້ມູນແຂວງ:</label>
+        <select class="form-control selectpicker" @bind="dis.ProId">
+            <option value="-1">--ກະລຸນາເລືອກແຂວງ--</option>
+            <ValidationMessage For="@(() => dis.ProId)" />
+            @foreach (var p in pro)
+            {
+                <option value="@p.Id">@p.Name</option>
+            }
+        </select>
+    </div>
+    @*<div class="form-group">
+        <label for="Name">ເລືອກແຂວງ:</label>
+        <input id="ProId" list="textProvinceSearch" class="form-control" @bind="dis.ProId"/>
+        <ValidationMessage For="@(() => dis.ProId)" />
+        <datalist id="textProvinceSearch">
+            @foreach (var p in pro)
+            {
+            <option value="@p.Id">@p.Name</option>
+            }
+        </datalist>
+    </div>*@
+
+    <button type="submit" class="btn btn-primary">ບັນທຶກ</button>
+    <button type="button" class="btn btn-warning" @onclick="@goBack">ກັບຄືນ</button>
+
+</EditForm>
+
+@code {
+    TblDistrict dis = new TblDistrict();
+    List<TblProvince> pro;
+
+    protected override void OnInitialized()
+    {
+        pro = settingService.ShowAllProvince();
+    }
+
+    private void AddDistrict()
+    {
+        settingService.CreateDis(dis);
+        nav.NavigateTo("district");
+        toastService.ShowSuccess($"ທ່ານເພີ່ມຂໍ້ມູນ {dis.Name} ສຳເລັດ!", "ຂໍ້ມູນເມືອງ");
+    }
+    private void goBack()
+    {
+        nav.NavigateTo("district");
+    }
+}

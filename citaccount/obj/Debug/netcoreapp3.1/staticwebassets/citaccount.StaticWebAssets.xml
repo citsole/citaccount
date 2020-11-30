@@ -1,0 +1,6 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="_content/Blazored.Toast" Path="C:\Users\CIT\.nuget\packages\blazored.toast\3.1.2\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/BlazorTable" Path="C:\Users\CIT\.nuget\packages\blazortable\1.14.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/MatBlazor" Path="C:\Users\CIT\.nuget\packages\matblazor\2.8.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Oceanware.Ocean.Blazor" Path="C:\Users\CIT\.nuget\packages\oceanware.ocean.blazor\2.0.0\build\..\staticwebassets\" />
+</StaticWebAssets>

@@ -1,0 +1,52 @@
+﻿@page "/deletebranch/{currentId}"
+
+@using citaccount.Data
+@using citaccount.Service
+
+@inject SettingService settingService
+@inject NavigationManager nav
+@inject IToastService toastService
+
+<h3>ລຶບຂໍ້ມູນ</h3>
+<hr />
+<h3>ທ່ານຕ້ອງການລຶບຂໍ້ມູູນນີ້ ຫຼື ບໍ?</h3>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            <label>ເລກບັນຊີ:</label>
+            <label>@bra.Code - @bra.Name</label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-danger" @onclick="@DeleteBranch" value="ລຶບຂໍ້ມູນ" />
+            <input type="button" class="btn btn-warning" @onclick="@goBack" value="ຍົກເລີກ" />
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string currentId { get; set; }
+
+    TblBranch bra = new TblBranch();
+
+    protected override void OnInitialized()
+    {
+        bra = settingService.GetBranchById(Convert.ToInt32(currentId));
+    }
+
+    protected void DeleteBranch()
+    {
+        settingService.DeleteBranch(bra);
+        nav.NavigateTo("branch");
+        toastService.ShowWarning($"ທ່ານໄດ້ລຶບຂໍ້ມູນ {bra.Name} ສຳເລັດແລ້ວ!", "ກູ່ມບັນຊີ");
+    }
+    void goBack()
+    {
+        nav.NavigateTo("branch");
+    }
+}

@@ -1,0 +1,52 @@
+﻿@page "/deletecurrency/{currentId}"
+
+@using citaccount.Data
+@using citaccount.Service
+
+@inject SettingService settingService
+@inject NavigationManager nav
+@inject IToastService toastService
+
+<h3>ລຶບຂໍ້ມູນ</h3>
+<hr />
+<h3>ທ່ານຕ້ອງການລຶບຂໍ້ມູູນນີ້ ຫຼື ບໍ?</h3>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            <label>ເລກບັນຊີ:</label>
+            <label>@cur.Symboll - @cur.Name</label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-danger" @onclick="@DeleteCurrency" value="ລຶບຂໍ້ມູນ" />
+            <input type="button" class="btn btn-warning" @onclick="@goBack" value="ຍົກເລີກ" />
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string currentId { get; set; }
+
+    TblCurrency cur = new TblCurrency();
+
+    protected override void OnInitialized()
+    {
+        cur = settingService.GetCurrencyById(Convert.ToInt32(currentId));
+    }
+
+    protected void DeleteCurrency()
+    {
+        settingService.DeleteCurrency(cur);
+        nav.NavigateTo("currency");
+        toastService.ShowWarning($"ທ່ານໄດ້ລຶບຂໍ້ມູນ {cur.Name} ສຳເລັດແລ້ວ!", "ກູ່ມບັນຊີ");
+    }
+    void goBack()
+    {
+        nav.NavigateTo("currency");
+    }
+}

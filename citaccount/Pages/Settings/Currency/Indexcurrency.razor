@@ -1,0 +1,43 @@
+﻿@page "/currency"
+
+@using citaccount.Service
+@using citaccount.Data
+@using MatBlazor
+
+@inject SettingService settingService
+@inject IToastService toastService
+
+@if (cur == null)
+{
+    <p><em>ກຳລັງໂຫຼດຂໍ້ມູນ...</em></p>
+}
+else
+{
+    <a class="btn btn-primary btn-sm" href="/createcurrency">ເພີ່ມໃໝ່</a>
+    <MatTable Items="@cur" PageSize="10" LoadInitialData="true" Striped="true" FilterByColumnName="Name" DebounceMilliseconds="150" class="mat-elevation-z5">
+        <MatTableHeader>
+            <th>ລດ</th>
+            <th>ສັນຍາລັກ</th>
+            <th>ຊື່ສະກຸນເງິນ</th>
+            <th>Actions</th>
+        </MatTableHeader>
+        <MatTableRow>
+            <td></td>
+            <td>@context.Symboll</td>
+            <td width="50%">@context.Name</td>
+            <td>
+                <a type="button" class="btn btn-primary btn-sm" href="editcurrency/@context.Id">ແກ້ໄຂ</a>
+                <a type="button" class="btn btn-danger btn-sm" href="deletecurrency/@context.Id">ລຶບຂໍ້ມູນ</a>
+            </td>
+        </MatTableRow>
+    </MatTable>
+}
+
+@code {
+    List<TblCurrency> cur;
+    protected override void OnInitialized()
+    {
+        cur = settingService.ShowAllCurrency();
+        //toastService.ShowSuccess($"ໂຫຼດຂໍ້ມູນສຳເລັດ! ປະກອບມີ {gracc.Count()} ກູ່ມບັນຊີ.", "ກູ່ມບັນຊີ");
+    }
+}

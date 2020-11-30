@@ -1,0 +1,38 @@
+﻿@page "/province"
+
+@using citaccount.Service
+@using citaccount.Data
+@using citaccount.Class
+@using BlazorTable
+
+@inject SettingService settingService
+@inject IToastService toastService
+
+@if (pro == null)
+{
+    <p><em>ກຳລັງໂຫຼດຂໍ້ມູນ...</em></p>
+}
+else
+{
+    <a class="btn btn-primary btn-sm" href="/createprovince">ເພີ່ມໃໝ່</a>
+    <Table TableItem="TblProvince" Items="pro" PageSize="10" ShowSearchBar="true" ShowFooter="true">
+        <Column TableItem="TblProvince" Title="ລະຫັດ" Field="@(x=>x.Code)" Sortable="true" Filterable="true" Width="20%" SetFooterValue="@TotalProvinceText"></Column>
+        <Column TableItem="TblProvince" Title="ຊື່ແຂວງ" Field="@(x=>x.Name)" Sortable="true" Filterable="true" Width="60%" Aggregate="AggregateType.Count"></Column>
+        <Column TableItem="TblProvince" Title="Actions" Width="20%">
+            <Template>
+                <a type="button" class="btn btn-primary btn-sm" href="editprovince/@context.Id">ແກ້ໄຂ</a>
+                <a type="button" class="btn btn-danger btn-sm" href="deleteprovince/@context.Id">ລຶບຂໍ້ມູນ</a>
+            </Template>
+        </Column>
+        <Pager ShowPageNumber="true" ShowTotalCount="true" />
+    </Table>
+}
+
+@code {
+    public string TotalProvinceText = "ລວມ:";
+    List<TblProvince> pro;
+    protected override void OnInitialized()
+    {
+        pro = settingService.ShowAllProvince();
+    }
+}

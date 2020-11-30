@@ -1,0 +1,52 @@
+﻿@page "/deleteaccount/{currentId}"
+
+@using citaccount.Data
+@using citaccount.Service
+
+@inject SettingService settingService
+@inject NavigationManager nav
+@inject IToastService toastService
+
+<h3>ລຶບຂໍ້ມູນ</h3>
+<hr />
+<h3>ທ່ານຕ້ອງການລຶບຂໍ້ມູູນນີ້ ຫຼື ບໍ?</h3>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            <label>ເລກບັນຊີ:</label>
+            <label>@acc.AccNo - @acc.Name</label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-danger" @onclick="@DeleteGroupAcc" value="ລຶບຂໍ້ມູນ" />
+            <input type="button" class="btn btn-warning" @onclick="@goBack" value="ຍົກເລີກ" />
+        </div>
+    </div>
+</div>
+
+    @code {
+        [Parameter]
+        public string currentId { get; set; }
+
+        TblAcc acc = new TblAcc();
+
+        protected override void OnInitialized()
+        {
+            acc = settingService.GetAccById(Convert.ToInt32(currentId));
+        }
+
+        protected void DeleteGroupAcc()
+        {
+            settingService.DeleteAcc(acc);
+            nav.NavigateTo("account");
+            toastService.ShowWarning($"ທ່ານໄດ້ລຶບຂໍ້ມູນ {acc.Name} ສຳເລັດແລ້ວ!", "ກູ່ມບັນຊີ");
+        }
+        void goBack()
+        {
+            nav.NavigateTo("account");
+        }
+    }

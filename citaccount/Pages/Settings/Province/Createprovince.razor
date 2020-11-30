@@ -1,0 +1,42 @@
+﻿@page "/createprovince"
+
+@using citaccount.Data
+@using citaccount.Service
+
+@inject SettingService settingService
+@inject IToastService toastService
+@inject NavigationManager nav 
+
+<h3>ເພີ່ມໃໝ່</h3>
+<EditForm Model="@pro" OnValidSubmit="@AddProvince">
+    <FluentValidationValidator/>
+    <div class="form-group">
+        <label for="Code">ລະຫັດແຂວງ:</label>
+        <InputText id="Code" class="form-control" @bind-Value="pro.Code" placeholder="ລະຫັດແຂວງ"></InputText>
+        <ValidationMessage For="@(() => pro.Code)" />
+    </div>
+    <div class="form-group">
+        <label for="Name">ຊື່ແຂວງ:</label>
+        <InputText id="Name" class="form-control" @bind-Value="pro.Name" placeholder="ຊື່ແຂວງ"></InputText>
+        <ValidationMessage For="@(() => pro.Name)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">ບັນທຶກ</button>
+    <button type="button" class="btn btn-warning" @onclick="@goBack">ກັບຄືນ</button>
+
+</EditForm>
+
+@code {
+    TblProvince pro = new TblProvince();
+
+    private void AddProvince()
+    {
+        settingService.CreatePro(pro);
+        nav.NavigateTo("province");
+        toastService.ShowSuccess($"ທ່ານເພີ່ມຂໍ້ມູນ {pro.Name} ສຳເລັດ!", "ຂໍ້ມູນແຂວງ");
+    }
+    private void goBack()
+    {
+        nav.NavigateTo("province");
+    }
+}

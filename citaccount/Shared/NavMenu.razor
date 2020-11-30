@@ -1,0 +1,161 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">CIT ACC</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="#" @onclick="()=>expandSubMenuAccount = !expandSubMenuAccount">
+                <span class="oi oi-aperture" aria-hidden="true"></span> ບັນຊີ
+            </NavLink>
+
+            @if (expandSubMenuAccount)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="transection">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> ລາຍການບັນຊີ
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="account">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> ສາລະບານບັນຊີ
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="#" @onclick="()=>expandSubMenuFollowMoney = !expandSubMenuFollowMoney">
+                <span class="oi oi-dollar" aria-hidden="true"></span> ຕິດຕາມເງິນ
+            </NavLink>
+
+            @if (expandSubMenuFollowMoney)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="cash">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> ເງິນສົດ
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="bank">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> ເງິນຝາກ
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="#" @onclick="()=>expandSubSetting = !expandSubSetting">
+                <span class="oi oi-cog" aria-hidden="true"></span> ຕັ້ງຄ່າ
+            </NavLink>
+
+            @if (expandSubSetting)
+            {
+        <ul class="nav flex-column">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="account">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> ບັນຊີ
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="branch">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> ສາຂາ
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="currency">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> ສະກຸນເງິນ
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="position">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> ຕຳແໜ່ງງານ
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="department">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> ພະແນກການ
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="province">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> ຂໍ້ມູນແຂວງ
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="district">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> ຂໍ້ມູນເມືອງ
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="village">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> ຂໍ້ມູນບ້ານ
+                </NavLink>
+            </li>
+        </ul>
+            }
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="#" @onclick="()=>expandSubReport = !expandSubReport">
+                <span class="oi oi-spreadsheet" aria-hidden="true"></span> ລາຍງານ
+            </NavLink>
+
+            @if (expandSubReport)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="groupaccount">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> ບັນຊີສຳຮອງ
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="account">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> ບັນຊີເງິນສົດ
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="acctype">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> ບັນຊີເງິນຝາກ
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="brahch">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> ເຄື່ອງໃນສາງ
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+
+    </ul>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private bool expandSubMenuAccount;
+    private bool expandSubMenuFollowMoney;
+    private bool expandSubSetting;
+    private bool expandSubReport;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

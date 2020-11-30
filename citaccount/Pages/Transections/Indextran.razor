@@ -1,0 +1,70 @@
+﻿@page "/transection"
+
+@using citaccount.Service
+@using citaccount.Data
+@using BlazorTable 
+
+@inject TransectionService tranService
+@inject IToastService toastService
+
+@if (tran == null)
+{
+    <p><em>ກຳລັງໂຫຼດຂໍ້ມູນ...</em></p>
+}
+else
+{
+    <a class="btn btn-primary btn-sm" href="/createtran">ເພີ່ມໃໝ່</a>
+
+    <Table TableItem="TblTransection" Items="tran" PageSize="10" ColumnReorder="true" ShowSearchBar="true" ShowFooter="true">
+        <Column TableItem="TblTransection" Title="ລດ" Width="2%" Align="Align.Center">
+            <Template>
+                @{@RowNumber; RowNumber++;}
+            </Template>
+        </Column>
+        <Column TableItem="TblTransection" Title="ວັນທີ" Field="@(x => x.CreateDate)" Format="dd/MM/yyyy" Sortable="true" Width="6%" Align="Align.Center"></Column>
+        <Column TableItem="TblTransection" Title="ເລກທີ" Field="@(x=>x.TranNo)" Sortable="true" Filterable="true" Width="5%" Align="Align.Center"></Column>
+        <Column TableItem="TblTransection" Title="ເນື້ອໃນ" Field="@(x => x.Des)" Sortable="true" Width="40%"></Column>
+        <Column TableItem="TblTransection" Title="ໜີ້" Field="@(x => x.AccDebit)" Sortable="true" Width="4%" Align="Align.Right"></Column>
+        <Column TableItem="TblTransection" Title="ມີ" Field="@(x => x.AccCredit)" Sortable="true" Width="4%" SetFooterValue="@TotalMoneyFooterText" Align="Align.Right"></Column>
+        <Column TableItem="TblTransection" Title="ວົງເງິນ" Field="@(x => x.Amount)" Sortable="true" Width="12%" Format="N" Aggregate="AggregateType.Sum" Align="Align.Right"></Column>
+        <Column TableItem="TblTransection" Title="ສະຖານະ" Field="@(x => x.Status.Name)" Sortable="true" Width="4%" Align="Align.Center">
+            <Template>
+                @if (context.StatusId == 2)
+                {
+                    <a class="btn btn-success btn-sm">@context.Status.Name</a>
+                }
+                else if (context.StatusId == 3)
+                {
+                    <a class="btn btn-danger btn-sm">@context.Status.Name</a>
+                }
+                else
+                {
+                    <a class="btn btn-outline-primary btn-sm">@context.Status.Name</a>
+                }
+            </Template>
+        </Column>
+        <Column TableItem="TblTransection" Title="ຜູ້ໃຊ້" Field="@(x => x.User.Username)" Sortable="true" Width="4%">
+        </Column>
+        <Column TableItem="TblTransection" Title="ສາຂາ" Field="@(x => x.Branch.Name)" Sortable="true" Width="4%"></Column>
+        <Column TableItem="TblTransection" Title="Actions" Width="24%">
+            <Template>
+                <a type="button" class="btn btn-primary btn-sm" href="edittran/@context.Id"><i class="oi oi-pencil"></i></a>
+                <a type="button" class="btn btn-outline-info btn-sm" href="viewtran/@context.Id"><i class="oi oi-eye"></i></a>
+                <a type="button" class="btn btn-danger btn-sm" href="deletetran/@context.Id"><i class="oi oi-trash"></i></a>
+            </Template>
+        </Column>
+        <Pager ShowPageNumber="true" ShowTotalCount="true" />
+    </Table>
+}
+
+@code {
+    public int RowNumber = 1;
+    public string TotalMoneyFooterText = "ລວມ:";
+    List<TblTransection> tran;
+
+    protected override void OnInitialized()
+    {
+        tran = tranService.ShowAllTran();
+        //toastService.ShowSuccess($"ໂຫຼດຂໍ້ມູນສຳເລັດ! ປະກອບມີ {gracc.Count()} ກູ່ມບັນຊີ.", "ກູ່ມບັນຊີ");
+    }
+}

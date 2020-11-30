@@ -1,0 +1,57 @@
+﻿@page "/editaccount/{currentId}"
+
+@using citaccount.Service
+@using citaccount.Data
+
+@inject SettingService settingService
+@inject IToastService toastService
+@inject NavigationManager nav 
+
+<h3>ແກ້ໄຂ</h3>
+
+<EditForm Model="@acc" OnValidSubmit="UpdateGroupAcc">
+    <FluentValidationValidator />
+    <div class="form-group">
+        <label for="Code">ເລກບັນຊີ:</label>
+        <input type="text" class="form-control" @bind="@acc.AccNo" placeholder="ລະຫັດ">
+        <ValidationMessage For="@(() => acc.AccNo)" />
+    </div>
+    <div class="form-group">
+        <label for="Name">ຊື່ບັນຊີ:</label>
+        <input type="text" class="form-control" @bind="acc.Name" placeholder="ຊື່ບັນຊີ">
+        <ValidationMessage For="@(() => acc.Name)" />
+    </div>
+    <div class="form-group">
+        <label for="Name">ລົງໜີ້:</label>
+        <input type="checkbox" @bind="@acc.BalDebit">
+        <label for="Name">ລົງມີ:</label>
+        <input type="checkbox" @bind="@acc.BalCredit">
+    </div>
+
+    <button type="submit" class="btn btn-primary">ບັນທຶກ</button>
+    <button type="button" class="btn btn-warning" @onclick="@goBack">ກັບຄືນ</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public string currentId { get; set; }
+
+    TblAcc acc = new TblAcc();
+
+    protected override void OnInitialized()
+    {
+        acc = settingService.GetAccById(Convert.ToInt32(currentId));
+    }
+
+    protected void UpdateGroupAcc()
+    {
+        settingService.UpdateAcc(acc);
+        nav.NavigateTo("account");
+        toastService.ShowSuccess($"ທ່ານແກ້ໄຂຂໍ້ມູນ {acc.Name} ສຳເລັດ!", "ບັນຊີ");
+    }
+    void goBack()
+    {
+        nav.NavigateTo("account");
+    }
+}
